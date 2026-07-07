@@ -36,7 +36,8 @@ export function useTransactionForm(
     onSubmit({
       ...form,
       amount: +form.amount,
-      category: form.category as Category,
+      category: form.category as Category, // ← cast ได้เพราะ validate แล้ว
     })
   }
+  return { form, errors, submit }
 }
