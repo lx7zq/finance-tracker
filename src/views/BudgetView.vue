@@ -75,9 +75,10 @@
     <!-- ยังไม่มีงบเลย -->
     <v-card v-else rounded="lg" border flat class="d-flex align-center justify-center pa-8">
       <div class="text-center">
-        <v-icon icon="mdi-wallet-outline" size="40" color="grey" class="mb-2" />
-        <div class="text-body-2 text-medium-emphasis mb-4">ยังไม่มีงบที่ตั้งไว้ในเดือนนี้</div>
-        <v-btn color="primary" prepend-icon="mdi-plus" @click="openAddDialog"> ตั้งงบใหม่ </v-btn>
+        <EmptyLedger text="ยังไม่มีงบที่ตั้งไว้ในเดือนนี้" />
+        <v-btn color="primary" prepend-icon="mdi-plus" class="mt-4" @click="openAddDialog">
+          ตั้งงบใหม่
+        </v-btn>
       </div>
     </v-card>
 
@@ -116,6 +117,7 @@ import { computed, ref } from 'vue'
 
 import { useCurrentMonth } from '@/composables/useCurrentMonth'
 import { useTransactionStore } from '@/stores/transactions'
+import EmptyLedger from '@/components/ui/EmptyLedger.vue'
 import type { Budget, Category } from '@/types'
 import { CATEGORY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS, EXPENSE_CATEGORIES } from '@/types'
 import { formatCurrency } from '@/utils'

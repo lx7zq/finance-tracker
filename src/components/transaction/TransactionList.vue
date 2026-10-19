@@ -42,16 +42,15 @@
       </template>
     </v-list-item>
 
-    <v-list-item v-if="transactions.length === 0">
-      <v-list-item-title class="text-center text-medium-emphasis py-8">
-        ยังไม่มีรายการในเดือนนี้
-      </v-list-item-title>
+    <v-list-item v-if="transactions.length === 0" class="justify-center">
+      <EmptyLedger text="ยังไม่มีรายการในเดือนนี้" />
     </v-list-item>
   </v-list>
 </template>
 
 <script setup lang="ts">
 import { useTransactionStore } from '@/stores/transactions'
+import EmptyLedger from '@/components/ui/EmptyLedger.vue'
 import type { Transaction } from '@/types'
 import { CATEGORY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS } from '@/types'
 import { formatCurrency, formatDate } from '@/utils'

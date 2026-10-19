@@ -1,8 +1,8 @@
 <template>
   <div>
     <Doughnut v-if="series.values.length > 0" :data="data" :options="options" />
-    <div v-else class="text-body-2 text-medium-emphasis text-center py-8">
-      ยังไม่มีรายจ่ายในเดือนนี้
+    <div v-else class="py-8">
+      <EmptyLedger text="ยังไม่มีรายจ่ายในเดือนนี้" />
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@ import { computed } from 'vue'
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
 
+import EmptyLedger from '@/components/ui/EmptyLedger.vue'
 import type { Category } from '@/types'
 import { buildCategorySeries } from '@/utils/charts'
 
