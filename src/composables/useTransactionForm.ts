@@ -1,0 +1,44 @@
+import { reactive } from 'vue'
+
+import dayjs from 'dayjs'
+
+import type { Category, Transaction, TransactionType } from '@/types'
+
+export function useTransactionForm(
+  onSubmit: (data: Omit<Transaction, 'id' | 'createdAt'>) => void,
+) {
+  const form = reactive({
+    type: 'expense' as TransactionType,
+    amount: '',
+    category: '' as Category | '',
+    description: '',
+    date: dayjs().format('YYYY-MM-DD'),
+  })
+  const errors = reactive({ amount: '', category: '' })
+
+  function validate() {
+    errors.amount = ''
+    errors.category = ''
+
+    const value = Number(form.amount)
+    if (!form.amount || Number.isNaN(value) || value <= 0) {
+      errors.amount = 'กรุณาระบุจำนวนเงินมากกว่า 0'
+      return false
+    }
+    if (!form.category) {
+      errors.category = 'กรุณาเลือกหมวดหมู่'
+      return false
+    }
+    return true
+  }
+
+  function submit() {
+    if (!validate()) return
+    onSubmit({
+      ...form,
+      amount: +form.amount,
+      category: form.category as Category, // ← cast ได้เพราะ validate แล้ว
+    })
+  }
+  return { form, errors, submit }
+}
