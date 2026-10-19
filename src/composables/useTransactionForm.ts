@@ -20,8 +20,9 @@ export function useTransactionForm(
     errors.amount = ''
     errors.category = ''
 
-    if (!form.amount || isNaN(+form.amount)) {
-      errors.amount = 'กรุณาระบุจำนวนเงิน'
+    const value = Number(form.amount)
+    if (!form.amount || Number.isNaN(value) || value <= 0) {
+      errors.amount = 'กรุณาระบุจำนวนเงินมากกว่า 0'
       return false
     }
     if (!form.category) {
