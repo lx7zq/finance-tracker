@@ -48,7 +48,7 @@
         <span class="text-caption text-medium-emphasis">{{ filtered.length }} รายการ</span>
         <span class="text-caption">
           รวม:
-          <strong :class="totalAmount >= 0 ? 'text-success' : 'text-error'">
+          <strong class="num" :class="totalAmount >= 0 ? 'text-success' : 'text-error'">
             {{ formatCurrency(Math.abs(totalAmount)) }}
           </strong>
         </span>

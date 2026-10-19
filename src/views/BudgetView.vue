@@ -3,7 +3,7 @@
   <v-container>
     <div class="d-flex align-center justify-space-between mb-4">
       <h1 class="text-h5 font-weight-bold">งบประมาณ</h1>
-      <v-chip>{{ displayMonth }}</v-chip>
+      <v-chip color="primary" variant="tonal">{{ displayMonth }}</v-chip>
     </div>
 
     <!-- รายการงบที่ตั้งไว้แล้ว -->
@@ -25,10 +25,10 @@
             </div>
 
             <div class="d-flex justify-space-between mb-2">
-              <span class="text-caption text-medium-emphasis"
+              <span class="text-caption text-medium-emphasis num"
                 >งบ {{ formatCurrency(b.limit) }}</span
               >
-              <span class="text-error text-caption font-weight-bold">
+              <span class="text-error text-caption font-weight-semibold num">
                 ใช้ไป {{ formatCurrency(spent[b.category] ?? 0) }}
               </span>
             </div>
@@ -44,7 +44,7 @@
               <span class="text-caption text-medium-emphasis">
                 {{ getPercent(b) }}% ใช้ไปแล้ว
               </span>
-              <span class="text-caption" :class="`text-${getColor(b)}`">
+              <span class="text-caption num" :class="`text-${getColor(b)}`">
                 เหลือ {{ formatCurrency(Math.max(0, b.limit - (spent[b.category] ?? 0))) }}
               </span>
             </div>
@@ -56,10 +56,9 @@
       <v-col v-if="availableCategories.length > 0" cols="12" sm="6" md="4">
         <v-card
           rounded="lg"
-          border
           flat
           height="100%"
-          class="d-flex align-center justify-center"
+          class="d-flex align-center justify-center add-budget-card"
           style="min-height: 160px; cursor: pointer"
           @click="openAddDialog"
         >

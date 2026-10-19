@@ -4,16 +4,16 @@ import type { Category, Transaction } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 
 export const CHART_COLORS: string[] = [
-  '#10b981', // emerald
-  '#f59e0b', // amber
-  '#f43f5e', // rose
-  '#0ea5e9', // sky
-  '#8b5cf6', // violet
-  '#e879f9', // fuchsia
-  '#14b8a6', // teal
-  '#fb923c', // orange
-  '#84cc16', // lime
-  '#3b82f6', // blue
+  '#1E5C42', // forest
+  '#C9A227', // brass
+  '#B3453D', // brick
+  '#4A7C59', // sage
+  '#8B6F47', // clay
+  '#5B7B7A', // slate teal
+  '#A67C52', // tan
+  '#3D5A4C', // pine
+  '#7D6B58', // stone
+  '#2F4F43', // deep green
 ]
 
 export interface CategorySeries {

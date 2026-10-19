@@ -1,0 +1,112 @@
+:root {
+  --font-sans: 'IBM Plex Sans Thai', 'Noto Sans Thai', system-ui, sans-serif;
+  --font-display: 'Noto Serif Thai', 'IBM Plex Sans Thai', serif;
+  --color-ink: #16241c;
+  --color-brass: #c9a227;
+  --color-brass-soft: #e2726b;
+  --color-leaf-on-dark: #6fbf9b;
+  --color-line: #e3e6e0;
+}
+
+html,
+body {
+  font-family: var(--font-sans);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.nav-btn {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.nav-btn.v-btn--active {
+  color: var(--color-brass);
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--color-brass);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-right: 12px;
+}
+
+.brand-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.hero {
+  color: #fff;
+}
+
+.hero-month {
+  font-size: 1.25rem;
+  font-weight: 600;
+  min-width: 10ch;
+  text-align: center;
+}
+
+.hero-label {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.hero-balance {
+  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  line-height: 1.15;
+  color: var(--color-brass);
+}
+
+.hero-balance.is-negative {
+  color: var(--color-brass-soft);
+}
+
+.hero-balance.is-zero {
+  color: #fff;
+}
+
+.hero-sub-label {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.hero-sub-value {
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.hero-income {
+  color: var(--color-leaf-on-dark);
+}
+
+.hero-expense {
+  color: var(--color-brass-soft);
+}
+
+.add-budget-card {
+  border: 1.5px dashed var(--color-line);
+  transition: border-color 0.15s ease;
+}
+
+.add-budget-card:hover {
+  border-color: #1e5c42;
+}
+
+.ledger-row:hover {
+  background: #f4f5f1;
+}

@@ -11,7 +11,7 @@
       </template>
 
       <template #prepend>
-        <v-avatar color="surface-variant" size="38">
+        <v-avatar color="surface-variant" size="38" class="mr-1">
           {{ CATEGORY_ICONS[tx.category] }}
         </v-avatar>
       </template>
@@ -19,7 +19,7 @@
       <template #append>
         <div class="d-flex align-center ga-2">
           <span
-            class="font-weight-bold"
+            class="font-weight-semibold num"
             :class="tx.type === 'income' ? 'text-success' : 'text-error'"
           >
             {{ tx.type === 'income' ? '+' : '-' }}

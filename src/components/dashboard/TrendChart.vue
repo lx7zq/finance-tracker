@@ -31,12 +31,12 @@ const data = computed(() => ({
     {
       label: 'รายรับ',
       data: trend.value.map((item) => item.income),
-      backgroundColor: '#10b981',
+      backgroundColor: '#2F7D5C',
     },
     {
       label: 'รายจ่าย',
       data: trend.value.map((item) => item.expense),
-      backgroundColor: '#ef4444',
+      backgroundColor: '#B3453D',
     },
   ],
 }))
