@@ -1,0 +1,43 @@
+import { beforeEach, describe, expect, it } from 'vitest'
+import { createPinia, setActivePinia } from 'pinia'
+
+import { useTransactionStore } from '@/stores/transactions'
+import type { Transaction } from '@/types'
+
+const seedTransaction: Transaction = {
+  id: 't1',
+  type: 'expense',
+  amount: 150,
+  category: 'food',
+  description: 'ข้าวกลางวัน',
+  date: '2026-10-01',
+  createdAt: '2026-10-01T00:00:00.000Z',
+}
+
+describe('useTransactionStore persistence', () => {
+  beforeEach(() => {
+    localStorage.clear()
+    setActivePinia(createPinia())
+  })
+
+  it('โหลด transactions และ budgets จาก localStorage ตอนสร้าง store', () => {
+    localStorage.setItem('transactions', JSON.stringify([seedTransaction]))
+    localStorage.setItem(
+      'budgets',
+      JSON.stringify([{ category: 'food', month: '2026-10', limit: 5000 }]),
+    )
+
+    const store = useTransactionStore()
+
+    expect(store.transactions).toHaveLength(1)
+    expect(store.transactions[0]?.description).toBe('ข้าวกลางวัน')
+    expect(store.budgets[0]?.limit).toBe(5000)
+  })
+
+  it('ไม่มีข้อมูลใน localStorage → เริ่มว่าง', () => {
+    const store = useTransactionStore()
+
+    expect(store.transactions).toEqual([])
+    expect(store.budgets).toEqual([])
+  })
+})

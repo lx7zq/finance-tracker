@@ -104,6 +104,8 @@ export const useTransactionStore = defineStore('transactions', () => {
     localStorage.setItem(BUDGET_KEY, JSON.stringify(budgets.value))
   }
 
+  load()
+
   return {
     transactions,
     budgets,
