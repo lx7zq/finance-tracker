@@ -50,7 +50,34 @@ body {
 }
 
 .hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   color: #fff;
+}
+
+.hero-pattern {
+  background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27120%27 viewBox=%270 0 200 120%27 fill=%27none%27%3E%3Cpath d=%27M0 40C12.5 22 37.5 22 50 40C62.5 58 87.5 58 100 40C112.5 22 137.5 22 150 40C162.5 58 187.5 58 200 40%27 stroke=%27rgba(201,162,39,0.07)%27/%3E%3Cpath d=%27M0 76C12.5 94 37.5 94 50 76C62.5 58 87.5 58 100 76C112.5 94 137.5 94 150 76C162.5 58 187.5 58 200 76%27 stroke=%27rgba(201,162,39,0.07)%27/%3E%3Cpath d=%27M0 120C12.5 102 37.5 102 50 120C62.5 138 87.5 138 100 120C112.5 102 137.5 102 150 120C162.5 138 187.5 138 200 120%27 stroke=%27rgba(201,162,39,0.07)%27/%3E%3C/svg%3E');
+  background-repeat: repeat;
+  background-size: 200px 120px;
+}
+
+.hero-art {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  z-index: -1;
+  display: none;
+  width: 200px;
+  height: auto;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@media (min-width: 600px) {
+  .hero-art {
+    display: block;
+  }
 }
 
 .hero-month {

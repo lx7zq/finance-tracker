@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- hero band -->
-    <v-sheet color="ink" rounded="lg" class="hero pa-5 pa-sm-7 mb-4">
+    <v-sheet color="ink" rounded="lg" class="hero hero-pattern pa-5 pa-sm-7 mb-4">
       <div class="d-flex align-center justify-space-between flex-wrap ga-3 mb-4">
         <div class="d-flex align-center">
           <v-btn
@@ -55,6 +55,8 @@
           </span>
         </div>
       </div>
+
+      <HeroArt class="hero-art" />
     </v-sheet>
 
     <!-- กราฟ -->
@@ -91,6 +93,7 @@
 import { computed, ref } from 'vue'
 
 import CategoryChart from '@/components/dashboard/CategoryChart.vue'
+import HeroArt from '@/components/dashboard/HeroArt.vue'
 import TrendChart from '@/components/dashboard/TrendChart.vue'
 import TransactionForm from '@/components/transaction/TransactionForm.vue'
 import TransactionList from '@/components/transaction/TransactionList.vue'
