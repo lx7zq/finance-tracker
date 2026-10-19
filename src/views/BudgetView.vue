@@ -13,7 +13,9 @@
           <v-card-text>
             <div class="d-flex align-center justify-space-between mb-3">
               <div class="d-flex align-center ga-2">
-                <span>{{ CATEGORY_ICONS[b.category] }}</span>
+                <span :style="{ color: CATEGORY_COLORS[b.category] }">{{
+                  CATEGORY_ICONS[b.category]
+                }}</span>
                 <span class="font-weight-medium">{{ CATEGORY_LABELS[b.category] }}</span>
               </div>
               <v-btn
@@ -115,7 +117,7 @@ import { computed, ref } from 'vue'
 import { useCurrentMonth } from '@/composables/useCurrentMonth'
 import { useTransactionStore } from '@/stores/transactions'
 import type { Budget, Category } from '@/types'
-import { CATEGORY_ICONS, CATEGORY_LABELS, EXPENSE_CATEGORIES } from '@/types'
+import { CATEGORY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS, EXPENSE_CATEGORIES } from '@/types'
 import { formatCurrency } from '@/utils'
 
 const store = useTransactionStore()

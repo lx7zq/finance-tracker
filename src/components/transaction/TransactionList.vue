@@ -11,7 +11,12 @@
       </template>
 
       <template #prepend>
-        <v-avatar color="surface-variant" size="38" class="mr-1">
+        <v-avatar
+          :color="`${CATEGORY_COLORS[tx.category]}22`"
+          :style="{ color: CATEGORY_COLORS[tx.category] }"
+          size="38"
+          class="mr-1"
+        >
           {{ CATEGORY_ICONS[tx.category] }}
         </v-avatar>
       </template>
@@ -48,7 +53,7 @@
 <script setup lang="ts">
 import { useTransactionStore } from '@/stores/transactions'
 import type { Transaction } from '@/types'
-import { CATEGORY_ICONS, CATEGORY_LABELS } from '@/types'
+import { CATEGORY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS } from '@/types'
 import { formatCurrency, formatDate } from '@/utils'
 
 defineProps<{ transactions: Transaction[] }>()
