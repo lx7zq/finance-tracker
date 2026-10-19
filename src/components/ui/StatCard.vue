@@ -12,19 +12,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { formatCurrency } from '@/utils'
+
 const props = defineProps<{
   label: string
   amount: number
   variant?: 'income' | 'expense' | 'balance'
 }>()
 
-const formatted = computed(() =>
-  new Intl.NumberFormat('th-TH', {
-    style: 'currency',
-    currency: 'THB',
-    minimumFractionDigits: 0,
-  }).format(props.amount),
-)
+const formatted = computed(() => formatCurrency(props.amount))
 
 const amountColor = computed(() => ({
   'text-success': props.variant === 'income',
