@@ -39,18 +39,27 @@ export const useTransactionStore = defineStore('transactions', () => {
   }
 
   // Actions - Budgets
-  function setBudget(category: Category, limit: number) {
-    const existing = budgets.value.find((b) => b.category === category)
+  function setBudget(category: Category, month: string, limit: number) {
+    const existing = budgets.value.find((b) => b.category === category && b.month === month)
     if (existing) {
       existing.limit = limit
     } else {
-      budgets.value.push({ category, limit })
+      budgets.value.push({ category, month, limit })
     }
     saveBudgets()
   }
 
-  function getBudget(category: Category): number {
-    return budgets.value.find((b) => b.category === category)?.limit ?? 0
+  function getBudget(category: Category, month: string): number {
+    return budgets.value.find((b) => b.category === category && b.month === month)?.limit ?? 0
+  }
+
+  function getBudgetsForMonth(month: string) {
+    return budgets.value.filter((b) => b.month === month)
+  }
+
+  function removeBudget(category: Category, month: string) {
+    budgets.value = budgets.value.filter((b) => !(b.category === category && b.month === month))
+    saveBudgets()
   }
 
   // Getters (computed)
@@ -108,6 +117,8 @@ export const useTransactionStore = defineStore('transactions', () => {
     getTransactionsByMonth,
     setBudget,
     getBudget,
+    getBudgetsForMonth,
+    removeBudget,
     load,
   }
 })

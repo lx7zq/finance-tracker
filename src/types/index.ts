@@ -70,5 +70,6 @@ export const EXPENSE_CATEGORIES: Category[] = [
 
 export interface Budget {
   category: Category
+  month: string
   limit: number
 }

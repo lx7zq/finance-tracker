@@ -6,16 +6,20 @@ export function useCurrentMonth() {
   const currentMonth = ref(getThisMonth()) // "2025-06"
 
   function prevMonth() {
-    /* ลด month ลง 1 */
+    const [y, m] = currentMonth.value.split('-').map(Number)
+    const d = new Date(y!, m! - 2, 1)
+    currentMonth.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
   }
+
   function nextMonth() {
-    /* เพิ่ม month ขึ้น 1 */
+    const [y, m] = currentMonth.value.split('-').map(Number)
+    const d = new Date(y!, m!, 1)
+    currentMonth.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
   }
 
-  const label = computed(() => formatMonth(currentMonth.value))
+  const displayMonth = computed(() => formatMonth(currentMonth.value))
 
-  return { currentMonth, label, prevMonth, nextMonth }
+  return { currentMonth, displayMonth, prevMonth, nextMonth }
 }
 
-// ใน Component:
-const { currentMonth, label, prevMonth } = useCurrentMonth()
+const { currentMonth, displayMonth, prevMonth } = useCurrentMonth()

@@ -10,16 +10,16 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
-    // {
-    //   path: '/transactions',
-    //   name: 'transactions',
-    //   component: () => import('@/views/TransactionsView.vue'),
-    // },
-    // {
-    //   path: '/budget',
-    //   name: 'budget',
-    //   component: () => import('@/views/BudgetView.vue'),
-    // },
+    {
+      path: '/transactions',
+      name: 'transactions',
+      component: () => import('@/views/TransactionsView.vue'),
+    },
+    {
+      path: '/budget',
+      name: 'budget',
+      component: () => import('@/views/BudgetView.vue'),
+    },
   ],
 })
 
