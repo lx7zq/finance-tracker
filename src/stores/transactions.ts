@@ -89,14 +89,24 @@ export const useTransactionStore = defineStore('transactions', () => {
   }
 
   function load() {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) {
-      transactions.value = JSON.parse(raw) as Transaction[]
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (raw) {
+        const parsed: unknown = JSON.parse(raw)
+        transactions.value = Array.isArray(parsed) ? (parsed as Transaction[]) : []
+      }
+    } catch {
+      transactions.value = []
     }
 
-    const rawBudgets = localStorage.getItem(BUDGET_KEY)
-    if (rawBudgets) {
-      budgets.value = JSON.parse(rawBudgets) as Budget[]
+    try {
+      const rawBudgets = localStorage.getItem(BUDGET_KEY)
+      if (rawBudgets) {
+        const parsed: unknown = JSON.parse(rawBudgets)
+        budgets.value = Array.isArray(parsed) ? (parsed as Budget[]) : []
+      }
+    } catch {
+      budgets.value = []
     }
   }
 

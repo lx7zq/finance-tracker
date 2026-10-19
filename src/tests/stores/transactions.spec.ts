@@ -40,4 +40,28 @@ describe('useTransactionStore persistence', () => {
     expect(store.transactions).toEqual([])
     expect(store.budgets).toEqual([])
   })
+
+  it('localStorage พังหรือไม่ใช่ array → เริ่มว่าง ไม่โยน error', () => {
+    localStorage.setItem('transactions', '{not valid json')
+    localStorage.setItem('budgets', '"not-an-array"')
+
+    expect(() => useTransactionStore()).not.toThrow()
+
+    const store = useTransactionStore()
+    expect(store.transactions).toEqual([])
+    expect(store.budgets).toEqual([])
+  })
+
+  it('transactions พัง แต่ budgets ยังใช้ได้ → เก็บ budgets ไว้', () => {
+    localStorage.setItem('transactions', '{broken')
+    localStorage.setItem(
+      'budgets',
+      JSON.stringify([{ category: 'food', month: '2026-10', limit: 3000 }]),
+    )
+
+    const store = useTransactionStore()
+
+    expect(store.transactions).toEqual([])
+    expect(store.budgets[0]?.limit).toBe(3000)
+  })
 })
