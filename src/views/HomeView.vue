@@ -42,13 +42,21 @@
       </v-col>
     </v-row>
 
-    <!-- กราฟสัดส่วนรายจ่ายตามหมวด -->
+    <!-- กราฟ -->
     <v-row class="mb-4">
       <v-col cols="12" md="6">
         <v-card rounded="lg" border flat>
           <v-card-title class="pa-4 pb-0">รายจ่ายตามหมวด</v-card-title>
           <v-card-text class="pt-2">
             <CategoryChart :expenses="monthExpenseMap" />
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-card rounded="lg" border flat>
+          <v-card-title class="pa-4 pb-0">แนวโน้ม 6 เดือน</v-card-title>
+          <v-card-text class="pt-2">
+            <TrendChart :transactions="store.transactions" :end-month="currentMonth" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -68,6 +76,7 @@
 import { computed, ref } from 'vue'
 
 import CategoryChart from '@/components/dashboard/CategoryChart.vue'
+import TrendChart from '@/components/dashboard/TrendChart.vue'
 import TransactionForm from '@/components/transaction/TransactionForm.vue'
 import TransactionList from '@/components/transaction/TransactionList.vue'
 import StatCard from '@/components/ui/StatCard.vue'

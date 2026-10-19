@@ -1,4 +1,6 @@
-import type { Category } from '@/types'
+import dayjs from 'dayjs'
+
+import type { Category, Transaction } from '@/types'
 import { CATEGORY_LABELS } from '@/types'
 
 export const CHART_COLORS: string[] = [
@@ -31,4 +33,36 @@ export function buildCategorySeries(expenses: Partial<Record<Category, number>>)
     values: entries.map((entry) => entry.value),
     colors: entries.map((_, index) => CHART_COLORS[index % CHART_COLORS.length] ?? '#94a3b8'),
   }
+}
+
+export interface MonthlyTrendItem {
+  month: string
+  income: number
+  expense: number
+}
+
+export function buildMonthlyTrend(
+  transactions: Transaction[],
+  endMonth: string,
+  months = 6,
+): MonthlyTrendItem[] {
+  const end = dayjs(`${endMonth}-01`)
+
+  const items: MonthlyTrendItem[] = []
+  for (let i = months - 1; i >= 0; i--) {
+    items.push({ month: end.subtract(i, 'month').format('YYYY-MM'), income: 0, expense: 0 })
+  }
+
+  const byMonth = new Map(items.map((item) => [item.month, item]))
+  for (const transaction of transactions) {
+    const item = byMonth.get(transaction.date.slice(0, 7))
+    if (!item) continue
+    if (transaction.type === 'income') {
+      item.income += transaction.amount
+    } else {
+      item.expense += transaction.amount
+    }
+  }
+
+  return items
 }
