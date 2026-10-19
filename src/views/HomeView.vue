@@ -13,14 +13,33 @@
       </v-col>
     </v-row>
 
-    <!-- ปุ่มเพิ่ม -->
-    <div class="d-flex justify-end mb-4 ga-2">
-      <v-btn color="success" prepend-icon="mdi-plus" @click="formRef?.openAdd('income')">
-        รายรับ
-      </v-btn>
-      <v-btn color="error" prepend-icon="mdi-plus" @click="formRef?.openAdd('expense')">
-        รายจ่าย
-      </v-btn>
+    <!-- หัวเดือน + ปุ่มเพิ่ม -->
+    <div class="d-flex align-center justify-space-between mb-4 ga-2">
+      <div class="d-flex align-center ga-1">
+        <v-btn
+          icon="mdi-chevron-left"
+          size="small"
+          variant="text"
+          aria-label="เดือนก่อนหน้า"
+          @click="prevMonth"
+        />
+        <h1 class="text-h6 font-weight-bold">{{ displayMonth }}</h1>
+        <v-btn
+          icon="mdi-chevron-right"
+          size="small"
+          variant="text"
+          aria-label="เดือนถัดไป"
+          @click="nextMonth"
+        />
+      </div>
+      <div class="d-flex ga-2">
+        <v-btn color="success" prepend-icon="mdi-plus" @click="formRef?.openAdd('income')">
+          รายรับ
+        </v-btn>
+        <v-btn color="error" prepend-icon="mdi-plus" @click="formRef?.openAdd('expense')">
+          รายจ่าย
+        </v-btn>
+      </div>
     </div>
 
     <!-- รายการ -->
@@ -43,7 +62,7 @@ import { useCurrentMonth } from '@/composables/useCurrentMonth'
 import { useTransactionStore } from '@/stores/transactions'
 
 const store = useTransactionStore()
-const { currentMonth } = useCurrentMonth()
+const { currentMonth, displayMonth, prevMonth, nextMonth } = useCurrentMonth()
 const formRef = ref<InstanceType<typeof TransactionForm> | null>(null)
 
 const monthTransactions = computed(() =>

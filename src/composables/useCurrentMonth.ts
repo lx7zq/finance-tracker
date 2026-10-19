@@ -21,5 +21,3 @@ export function useCurrentMonth() {
 
   return { currentMonth, displayMonth, prevMonth, nextMonth }
 }
-
-const { currentMonth, displayMonth, prevMonth } = useCurrentMonth()
