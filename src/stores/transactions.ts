@@ -7,6 +7,27 @@ import type { Budget, Category, Transaction } from '@/types'
 const STORAGE_KEY = 'transactions'
 const BUDGET_KEY = 'budgets'
 
+function isValidTransaction(value: unknown): value is Transaction {
+  if (typeof value !== 'object' || value === null) return false
+  const item = value as Record<string, unknown>
+  return (
+    typeof item.id === 'string' &&
+    typeof item.date === 'string' &&
+    typeof item.amount === 'number' &&
+    (item.type === 'income' || item.type === 'expense')
+  )
+}
+
+function isValidBudget(value: unknown): value is Budget {
+  if (typeof value !== 'object' || value === null) return false
+  const item = value as Record<string, unknown>
+  return (
+    typeof item.category === 'string' &&
+    typeof item.month === 'string' &&
+    typeof item.limit === 'number'
+  )
+}
+
 export const useTransactionStore = defineStore('transactions', () => {
   // State
   const transactions = ref<Transaction[]>([])
@@ -93,7 +114,7 @@ export const useTransactionStore = defineStore('transactions', () => {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const parsed: unknown = JSON.parse(raw)
-        transactions.value = Array.isArray(parsed) ? (parsed as Transaction[]) : []
+        transactions.value = Array.isArray(parsed) ? parsed.filter(isValidTransaction) : []
       }
     } catch {
       transactions.value = []
@@ -103,7 +124,7 @@ export const useTransactionStore = defineStore('transactions', () => {
       const rawBudgets = localStorage.getItem(BUDGET_KEY)
       if (rawBudgets) {
         const parsed: unknown = JSON.parse(rawBudgets)
-        budgets.value = Array.isArray(parsed) ? (parsed as Budget[]) : []
+        budgets.value = Array.isArray(parsed) ? parsed.filter(isValidBudget) : []
       }
     } catch {
       budgets.value = []

@@ -64,4 +64,23 @@ describe('useTransactionStore persistence', () => {
     expect(store.transactions).toEqual([])
     expect(store.budgets[0]?.limit).toBe(3000)
   })
+
+  it('array ที่ JSON ถูกแต่ shape ผิด → เก็บเฉพาะรายการที่ใช้ได้ ไม่ crash ตอนโหลด', () => {
+    localStorage.setItem(
+      'transactions',
+      JSON.stringify([1, { amount: 100 }, { ...seedTransaction, amount: 75 }]),
+    )
+    localStorage.setItem(
+      'budgets',
+      JSON.stringify([{ category: 'food' }, { category: 'food', month: '2026-10', limit: 1000 }]),
+    )
+
+    const store = useTransactionStore()
+
+    expect(store.transactions).toHaveLength(1)
+    expect(store.transactions[0]?.date).toBe('2026-10-01')
+    expect(store.transactions[0]?.amount).toBe(75)
+    expect(store.budgets).toHaveLength(1)
+    expect(store.budgets[0]?.limit).toBe(1000)
+  })
 })
