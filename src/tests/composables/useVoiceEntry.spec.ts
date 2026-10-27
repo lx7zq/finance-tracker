@@ -88,6 +88,8 @@ beforeEach(() => {
   localStorage.clear()
   setActivePinia(createPinia())
   vi.clearAllMocks()
+  // แยก test จาก .env ของเครื่อง — เคส "ไม่มี key" ต้องไม่มี key จริง
+  vi.stubEnv('VITE_GEMINI_API_KEY', '')
   FakeRecognition.instances.length = 0
   FakeRecorder.instances.length = 0
   Reflect.deleteProperty(globalThis, 'SpeechRecognition')
@@ -96,6 +98,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  vi.unstubAllEnvs()
   vi.unstubAllGlobals()
 })
 

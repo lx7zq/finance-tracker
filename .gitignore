@@ -37,3 +37,8 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Env files — ห้าม commit คีย์จริง (.env.example ยกเว้นให้ commit ได้)
+.env
+.env.*
+!.env.example

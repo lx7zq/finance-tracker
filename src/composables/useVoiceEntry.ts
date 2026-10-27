@@ -38,7 +38,7 @@ export function useVoiceEntry() {
   const pendingTranscript = ref('')
 
   const supported: ComputedRef<boolean> = computed(() => isVoiceCaptureSupported())
-  const hasKey = computed(() => settings.apiKey !== '')
+  const hasKey = computed(() => settings.hasKey)
 
   let parsing = false
   let starting = false
@@ -120,8 +120,8 @@ export function useVoiceEntry() {
     parsing = true
     phase.value = 'processing'
     try {
-      if (settings.apiKey) {
-        draft.value = await callGeminiParse(input, settings.apiKey)
+      if (settings.effectiveApiKey) {
+        draft.value = await callGeminiParse(input, settings.effectiveApiKey)
         phase.value = 'confirm'
         return
       }
@@ -165,7 +165,7 @@ export function useVoiceEntry() {
         const mimeTypeUsed = recorder?.mimeType || mimeType || 'audio/webm'
         const captured = [...chunks]
         releaseAudio()
-        if (!settings.apiKey) {
+        if (!settings.hasKey) {
           phase.value = 'error'
           errorMessage.value = NO_KEY_AUDIO_MESSAGE
           return
