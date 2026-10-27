@@ -88,3 +88,10 @@ export interface Budget {
   month: string
   limit: number
 }
+
+export interface VoiceDraft {
+  type: TransactionType
+  amount: number
+  category: Category
+  description: string
+}
