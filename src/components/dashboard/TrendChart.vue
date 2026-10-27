@@ -1,8 +1,8 @@
 <template>
   <div>
     <Bar v-if="hasData" :data="data" :options="options" />
-    <div v-else class="text-body-2 text-medium-emphasis text-center py-8">
-      ยังไม่มีข้อมูลในช่วง 6 เดือน
+    <div v-else class="py-8">
+      <EmptyLedger text="ยังไม่มีข้อมูลในช่วง 6 เดือน" />
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@ import { computed } from 'vue'
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from 'chart.js'
 import { Bar } from 'vue-chartjs'
 
+import EmptyLedger from '@/components/ui/EmptyLedger.vue'
 import { formatMonth } from '@/utils'
 import type { Transaction } from '@/types'
 import { buildMonthlyTrend } from '@/utils/charts'
@@ -31,12 +32,12 @@ const data = computed(() => ({
     {
       label: 'รายรับ',
       data: trend.value.map((item) => item.income),
-      backgroundColor: '#10b981',
+      backgroundColor: '#2F7D5C',
     },
     {
       label: 'รายจ่าย',
       data: trend.value.map((item) => item.expense),
-      backgroundColor: '#ef4444',
+      backgroundColor: '#B3453D',
     },
   ],
 }))

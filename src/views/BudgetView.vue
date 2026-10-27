@@ -3,7 +3,7 @@
   <v-container>
     <div class="d-flex align-center justify-space-between mb-4">
       <h1 class="text-h5 font-weight-bold">งบประมาณ</h1>
-      <v-chip>{{ displayMonth }}</v-chip>
+      <v-chip color="primary" variant="tonal">{{ displayMonth }}</v-chip>
     </div>
 
     <!-- รายการงบที่ตั้งไว้แล้ว -->
@@ -13,7 +13,9 @@
           <v-card-text>
             <div class="d-flex align-center justify-space-between mb-3">
               <div class="d-flex align-center ga-2">
-                <span>{{ CATEGORY_ICONS[b.category] }}</span>
+                <span :style="{ color: CATEGORY_COLORS[b.category] }">{{
+                  CATEGORY_ICONS[b.category]
+                }}</span>
                 <span class="font-weight-medium">{{ CATEGORY_LABELS[b.category] }}</span>
               </div>
               <v-btn
@@ -25,10 +27,10 @@
             </div>
 
             <div class="d-flex justify-space-between mb-2">
-              <span class="text-caption text-medium-emphasis"
+              <span class="text-caption text-medium-emphasis num"
                 >งบ {{ formatCurrency(b.limit) }}</span
               >
-              <span class="text-error text-caption font-weight-bold">
+              <span class="text-error text-caption font-weight-semibold num">
                 ใช้ไป {{ formatCurrency(spent[b.category] ?? 0) }}
               </span>
             </div>
@@ -44,7 +46,7 @@
               <span class="text-caption text-medium-emphasis">
                 {{ getPercent(b) }}% ใช้ไปแล้ว
               </span>
-              <span class="text-caption" :class="`text-${getColor(b)}`">
+              <span class="text-caption num" :class="`text-${getColor(b)}`">
                 เหลือ {{ formatCurrency(Math.max(0, b.limit - (spent[b.category] ?? 0))) }}
               </span>
             </div>
@@ -56,10 +58,9 @@
       <v-col v-if="availableCategories.length > 0" cols="12" sm="6" md="4">
         <v-card
           rounded="lg"
-          border
           flat
           height="100%"
-          class="d-flex align-center justify-center"
+          class="d-flex align-center justify-center add-budget-card"
           style="min-height: 160px; cursor: pointer"
           @click="openAddDialog"
         >
@@ -74,9 +75,10 @@
     <!-- ยังไม่มีงบเลย -->
     <v-card v-else rounded="lg" border flat class="d-flex align-center justify-center pa-8">
       <div class="text-center">
-        <v-icon icon="mdi-wallet-outline" size="40" color="grey" class="mb-2" />
-        <div class="text-body-2 text-medium-emphasis mb-4">ยังไม่มีงบที่ตั้งไว้ในเดือนนี้</div>
-        <v-btn color="primary" prepend-icon="mdi-plus" @click="openAddDialog"> ตั้งงบใหม่ </v-btn>
+        <EmptyLedger text="ยังไม่มีงบที่ตั้งไว้ในเดือนนี้" />
+        <v-btn color="primary" prepend-icon="mdi-plus" class="mt-4" @click="openAddDialog">
+          ตั้งงบใหม่
+        </v-btn>
       </div>
     </v-card>
 
@@ -115,8 +117,9 @@ import { computed, ref } from 'vue'
 
 import { useCurrentMonth } from '@/composables/useCurrentMonth'
 import { useTransactionStore } from '@/stores/transactions'
+import EmptyLedger from '@/components/ui/EmptyLedger.vue'
 import type { Budget, Category } from '@/types'
-import { CATEGORY_ICONS, CATEGORY_LABELS, EXPENSE_CATEGORIES } from '@/types'
+import { CATEGORY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS, EXPENSE_CATEGORIES } from '@/types'
 import { formatCurrency } from '@/utils'
 
 const store = useTransactionStore()

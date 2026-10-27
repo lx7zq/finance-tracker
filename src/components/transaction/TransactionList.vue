@@ -11,7 +11,12 @@
       </template>
 
       <template #prepend>
-        <v-avatar color="surface-variant" size="38">
+        <v-avatar
+          :color="`${CATEGORY_COLORS[tx.category]}22`"
+          :style="{ color: CATEGORY_COLORS[tx.category] }"
+          size="38"
+          class="mr-1"
+        >
           {{ CATEGORY_ICONS[tx.category] }}
         </v-avatar>
       </template>
@@ -19,7 +24,7 @@
       <template #append>
         <div class="d-flex align-center ga-2">
           <span
-            class="font-weight-bold"
+            class="font-weight-semibold num"
             :class="tx.type === 'income' ? 'text-success' : 'text-error'"
           >
             {{ tx.type === 'income' ? '+' : '-' }}
@@ -37,18 +42,17 @@
       </template>
     </v-list-item>
 
-    <v-list-item v-if="transactions.length === 0">
-      <v-list-item-title class="text-center text-medium-emphasis py-8">
-        ยังไม่มีรายการในเดือนนี้
-      </v-list-item-title>
+    <v-list-item v-if="transactions.length === 0" class="justify-center">
+      <EmptyLedger text="ยังไม่มีรายการในเดือนนี้" />
     </v-list-item>
   </v-list>
 </template>
 
 <script setup lang="ts">
 import { useTransactionStore } from '@/stores/transactions'
+import EmptyLedger from '@/components/ui/EmptyLedger.vue'
 import type { Transaction } from '@/types'
-import { CATEGORY_ICONS, CATEGORY_LABELS } from '@/types'
+import { CATEGORY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS } from '@/types'
 import { formatCurrency, formatDate } from '@/utils'
 
 defineProps<{ transactions: Transaction[] }>()

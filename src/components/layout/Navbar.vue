@@ -1,42 +1,32 @@
 <template>
-  <v-app-bar elevation="2" color="surface" density="comfortable" class="px-4">
-    <!-- Logo -->
+  <v-app-bar flat color="ink" class="px-4 px-sm-6" density="comfortable">
     <template #prepend>
-      <v-avatar color="primary" size="40" class="mr-3"> 💰 </v-avatar>
+      <span class="brand-mark" aria-hidden="true">฿</span>
+      <span class="brand-name font-display">บัญชีเงิน</span>
     </template>
-
-    <v-app-bar-title class="font-weight-bold text-primary"> Finance Tracker </v-app-bar-title>
 
     <v-spacer />
 
-    <!-- Menu -->
-    <v-btn to="/" prepend-icon="mdi-view-dashboard" variant="text" rounded="xl" class="mx-1">
-      Dashboard
-    </v-btn>
-
+    <v-btn to="/" variant="text" rounded="lg" class="nav-btn mx-1"> ภาพรวม </v-btn>
+    <v-btn to="/transactions" variant="text" rounded="lg" class="nav-btn mx-1"> รายการ </v-btn>
+    <v-btn to="/budget" variant="text" rounded="lg" class="nav-btn mx-1"> งบประมาณ </v-btn>
     <v-btn
-      to="/transactions"
-      prepend-icon="mdi-swap-horizontal"
+      icon="mdi-cog-outline"
       variant="text"
-      rounded="xl"
+      rounded="lg"
+      aria-label="ตั้งค่า"
       class="mx-1"
-    >
-      รายการ
-    </v-btn>
-
-    <v-btn to="/budget" prepend-icon="mdi-wallet" variant="text" rounded="xl" class="mx-1">
-      งบประมาณ
-    </v-btn>
-
-    <v-divider vertical class="mx-3" />
-
-    <!-- User -->
-    <v-btn icon variant="text">
-      <v-icon>mdi-bell-outline</v-icon>
-    </v-btn>
-
-    <v-avatar color="primary" size="36" class="ml-2">
-      <v-icon>mdi-account</v-icon>
-    </v-avatar>
+      @click="settingsRef?.open()"
+    />
   </v-app-bar>
+
+  <SettingsDialog ref="settingsRef" />
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+import SettingsDialog from '@/components/settings/SettingsDialog.vue'
+
+const settingsRef = ref<InstanceType<typeof SettingsDialog> | null>(null)
+</script>
