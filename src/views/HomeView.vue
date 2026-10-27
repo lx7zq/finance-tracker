@@ -94,15 +94,15 @@
     />
     <SettingsDialog ref="settingsRef" />
 
-    <v-fab
+    <button
       v-if="voiceSupported"
-      icon="mdi-microphone"
-      color="#C9A227"
-      size="large"
-      class="voice-fab"
+      type="button"
+      class="paw-fab"
       aria-label="บันทึกด้วยเสียง"
       @click="voiceRef?.open()"
-    />
+    >
+      <img :src="catPaw" alt="" width="64" height="64" />
+    </button>
   </v-container>
 </template>
 
@@ -122,6 +122,7 @@ import { useTransactionStore } from '@/stores/transactions'
 import type { Category } from '@/types'
 import { formatCurrency } from '@/utils'
 import { isVoiceCaptureSupported } from '@/utils/voice'
+import catPaw from '@/assets/cat.png'
 
 const store = useTransactionStore()
 const toast = useToastStore()
@@ -157,10 +158,30 @@ const monthExpenseMap = computed(() => {
 </script>
 
 <style scoped>
-.voice-fab {
+.paw-fab {
   position: fixed;
-  right: 20px;
-  bottom: 24px;
+  right: 14px;
+  bottom: 18px;
   z-index: 1005;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  filter: drop-shadow(0 6px 12px rgba(217, 115, 138, 0.35));
+  transition: transform 0.18s ease;
+}
+
+.paw-fab:hover {
+  transform: scale(1.08) rotate(-8deg);
+}
+
+.paw-fab:active {
+  transform: scale(0.92);
+}
+
+.paw-fab:focus-visible {
+  outline: 2px solid #d9738a;
+  outline-offset: 4px;
+  border-radius: 50%;
 }
 </style>
