@@ -68,6 +68,8 @@ export function useSpeechInput(handlers: { onFinal: (text: string) => void }) {
         }
       }
       rec.onerror = (event) => {
+        // 'aborted' = หยุดเองโดยผู้ใช้ (Chrome) — ไม่ใช่ความผิดพลาด
+        if (event.error === 'aborted') return
         errorMessage.value = ERROR_MESSAGES[event.error] ?? 'พูดไม่สำเร็จ ลองใหม่'
       }
       rec.onend = () => {

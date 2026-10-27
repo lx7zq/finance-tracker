@@ -13,7 +13,6 @@ const NO_AMOUNT_MESSAGE = 'ไม่เข้าใจยอดเงิน ล�
 const NO_KEY_AUDIO_MESSAGE = 'ต้องตั้งค่า Gemini API key ก่อนใช้เสียงบนเบราว์เซอร์นี้'
 const MIC_DENIED_MESSAGE = 'ไม่ได้รับอนุญาตให้ใช้ไมค์'
 const NO_AUDIO_MESSAGE = 'ไม่ได้ยินเสียง'
-const GENERIC_ERROR_MESSAGE = 'พูดไม่สำเร็จ ลองใหม่'
 
 const AUDIO_MIME_CANDIDATES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4']
 
@@ -42,6 +41,8 @@ export function useVoiceEntry() {
   const hasKey = computed(() => settings.apiKey !== '')
 
   let parsing = false
+  let starting = false
+  let startToken = 0
   let stream: MediaStream | null = null
   let tracks: MediaStreamTrack[] = []
   let recorder: MediaRecorder | null = null
@@ -53,7 +54,7 @@ export function useVoiceEntry() {
     },
   })
 
-  // จบการพูด (listening → false) และมี transcript → parse ทันที
+  // จบการพูด (listening → false) → มี transcript → parse, ไม่มี → กลับ idle (หยุดก่อนพูด)
   watch(speech.listening, (listening) => {
     if (listening) return
     if (speech.errorMessage.value) {
@@ -61,8 +62,11 @@ export function useVoiceEntry() {
       errorMessage.value = speech.errorMessage.value
       return
     }
-    if (pendingTranscript.value && phase.value === 'listening') {
+    if (phase.value !== 'listening') return
+    if (pendingTranscript.value) {
       void parse({ text: pendingTranscript.value })
+    } else {
+      reset()
     }
   })
 
@@ -91,6 +95,7 @@ export function useVoiceEntry() {
   }
 
   function cancel() {
+    startToken++
     speech.stop()
     releaseAudio()
     reset()
@@ -110,13 +115,6 @@ export function useVoiceEntry() {
     return true
   }
 
-  function failWith(err?: unknown) {
-    phase.value = 'error'
-    if (err instanceof GeminiParseError) errorMessage.value = err.message
-    else errorMessage.value = pendingTranscript.value ? '' : NO_KEY_AUDIO_MESSAGE
-    if (!errorMessage.value) errorMessage.value = GENERIC_ERROR_MESSAGE
-  }
-
   async function parse(input: GeminiParseInput) {
     if (parsing) return
     parsing = true
@@ -133,12 +131,12 @@ export function useVoiceEntry() {
       }
     } catch (err) {
       if (!draftFromKeywordFallback()) {
-        failWith(err)
-        if (!pendingTranscript.value && err instanceof GeminiParseError) {
-          errorMessage.value = err.message
-        } else if (!pendingTranscript.value && !(err instanceof GeminiParseError)) {
-          errorMessage.value = NO_KEY_AUDIO_MESSAGE
-        }
+        phase.value = 'error'
+        errorMessage.value = pendingTranscript.value
+          ? NO_AMOUNT_MESSAGE
+          : err instanceof GeminiParseError
+            ? err.message
+            : NO_KEY_AUDIO_MESSAGE
       }
     } finally {
       parsing = false
@@ -146,9 +144,17 @@ export function useVoiceEntry() {
   }
 
   async function startAudioRecording() {
+    const token = ++startToken
     try {
       stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       tracks = stream.getTracks()
+      if (token !== startToken) {
+        // ผู้ใช้ปิด/ยกเลิกระหว่างรออนุญาต — ปิดไมค์ ไม่เริ่มอัด
+        tracks.forEach((t) => t.stop())
+        tracks = []
+        stream = null
+        return
+      }
       const mimeType = AUDIO_MIME_CANDIDATES.find((m) => MediaRecorder.isTypeSupported(m)) ?? ''
       recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined)
       chunks = []
@@ -157,13 +163,14 @@ export function useVoiceEntry() {
       }
       recorder.onstop = async () => {
         const mimeTypeUsed = recorder?.mimeType || mimeType || 'audio/webm'
+        const captured = [...chunks]
         releaseAudio()
         if (!settings.apiKey) {
           phase.value = 'error'
           errorMessage.value = NO_KEY_AUDIO_MESSAGE
           return
         }
-        const blob = new Blob(chunks, { type: mimeTypeUsed })
+        const blob = new Blob(captured, { type: mimeTypeUsed })
         if (blob.size === 0) {
           phase.value = 'error'
           errorMessage.value = NO_AUDIO_MESSAGE
@@ -193,24 +200,29 @@ export function useVoiceEntry() {
   }
 
   async function start() {
-    if (!supported.value) return
+    if (starting || !supported.value) return
     if (phase.value === 'listening' || phase.value === 'processing' || phase.value === 'confirm') {
       return
     }
-    reset()
+    starting = true
+    try {
+      reset()
 
-    if (speech.supported.value) {
-      pendingTranscript.value = ''
-      speech.start()
-      if (speech.listening.value) {
-        phase.value = 'listening'
-      } else {
-        phase.value = 'error'
-        errorMessage.value = speech.errorMessage.value || MIC_DENIED_MESSAGE
+      if (speech.supported.value) {
+        pendingTranscript.value = ''
+        speech.start()
+        if (speech.listening.value) {
+          phase.value = 'listening'
+        } else {
+          phase.value = 'error'
+          errorMessage.value = speech.errorMessage.value || MIC_DENIED_MESSAGE
+        }
+        return
       }
-      return
+      await startAudioRecording()
+    } finally {
+      starting = false
     }
-    await startAudioRecording()
   }
 
   function stopCapture() {

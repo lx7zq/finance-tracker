@@ -113,6 +113,9 @@ export async function callGeminiParse(
       if (res.status === 429) {
         throw new GeminiParseError('โควต้า Gemini หมด ลองพูดใหม่หรือพิมพ์เอง', 'quota')
       }
+      if (res.status >= 500) {
+        throw new GeminiParseError('เชื่อมต่อ Gemini ไม่ได้ ตรวจอินเทอร์เน็ต', 'network')
+      }
       throw new GeminiParseError('API key ไม่ถูกต้อง ไปตั้งค่าใหม่', 'unauthorized')
     }
 

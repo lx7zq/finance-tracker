@@ -125,6 +125,14 @@ describe('callGeminiParse', () => {
     })
   })
 
+  it('status 503 (Gemini ล่ม) → network ไม่ใช่ unauthorized', async () => {
+    const fetchFn = vi.fn().mockResolvedValue({ ok: false, status: 503 } as unknown as Response)
+
+    await expect(callGeminiParse({ text: 'x' }, 'K', fetchFn as never)).rejects.toMatchObject({
+      code: 'network',
+    })
+  })
+
   it('response ไม่มี candidates → invalid-response', async () => {
     const fetchFn = vi.fn().mockResolvedValue(okResponse({ nothing: true }))
 
