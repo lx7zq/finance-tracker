@@ -86,25 +86,53 @@
     </v-card>
 
     <TransactionForm ref="formRef" />
+    <VoiceEntrySheet
+      ref="voiceRef"
+      @manual="formRef?.openAdd('expense')"
+      @saved="savedSnackbar = true"
+      @open-settings="settingsRef?.open()"
+    />
+    <SettingsDialog ref="settingsRef" />
+
+    <v-fab
+      v-if="voiceSupported"
+      icon="mdi-microphone"
+      color="#C9A227"
+      size="large"
+      class="voice-fab"
+      aria-label="บันทึกด้วยเสียง"
+      @click="voiceRef?.open()"
+    />
+
+    <v-snackbar v-model="savedSnackbar" timeout="2500" color="success">
+      บันทึกรายการแล้ว
+    </v-snackbar>
   </v-container>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
+import SettingsDialog from '@/components/settings/SettingsDialog.vue'
 import CategoryChart from '@/components/dashboard/CategoryChart.vue'
 import HeroArt from '@/components/dashboard/HeroArt.vue'
 import TrendChart from '@/components/dashboard/TrendChart.vue'
 import TransactionForm from '@/components/transaction/TransactionForm.vue'
 import TransactionList from '@/components/transaction/TransactionList.vue'
+import VoiceEntrySheet from '@/components/voice/VoiceEntrySheet.vue'
 import { useCurrentMonth } from '@/composables/useCurrentMonth'
 import { useTransactionStore } from '@/stores/transactions'
 import type { Category } from '@/types'
 import { formatCurrency } from '@/utils'
+import { isVoiceCaptureSupported } from '@/utils/voice'
 
 const store = useTransactionStore()
 const { currentMonth, displayMonth, prevMonth, nextMonth } = useCurrentMonth()
 const formRef = ref<InstanceType<typeof TransactionForm> | null>(null)
+const voiceRef = ref<InstanceType<typeof VoiceEntrySheet> | null>(null)
+const settingsRef = ref<InstanceType<typeof SettingsDialog> | null>(null)
+const savedSnackbar = ref(false)
+const voiceSupported = isVoiceCaptureSupported()
 
 const monthTransactions = computed(() =>
   store.transactions.filter((t) => t.date.startsWith(currentMonth.value)),
@@ -130,3 +158,12 @@ const monthExpenseMap = computed(() => {
   return map
 })
 </script>
+
+<style scoped>
+.voice-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  z-index: 1005;
+}
+</style>
