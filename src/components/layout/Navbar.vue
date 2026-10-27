@@ -1,8 +1,8 @@
 <template>
   <v-app-bar flat color="ink" class="px-4 px-sm-6" density="comfortable">
     <template #prepend>
-      <span class="brand-mark" aria-hidden="true">฿</span>
-      <span class="brand-name font-display">บัญชีเงิน</span>
+      <img :src="logoUrl" alt="โลโก้บันทึกออมรัก" class="brand-logo" />
+      <span class="brand-name font-display">บันทึกออมรัก</span>
     </template>
 
     <v-spacer />
@@ -27,6 +27,7 @@
 import { ref } from 'vue'
 
 import SettingsDialog from '@/components/settings/SettingsDialog.vue'
+import logoUrl from '@/assets/logo.jpg'
 
 const settingsRef = ref<InstanceType<typeof SettingsDialog> | null>(null)
 </script>

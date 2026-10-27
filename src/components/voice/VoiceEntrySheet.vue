@@ -6,7 +6,7 @@
         <v-btn
           icon="mdi-microphone"
           size="x-large"
-          color="#C9A227"
+          color="#D9738A"
           aria-label="เริ่มพูด"
           @click="start"
         />
