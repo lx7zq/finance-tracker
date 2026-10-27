@@ -21,13 +21,11 @@ export const useSettingsStore = defineStore('settings', () => {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const parsed: unknown = JSON.parse(raw)
-        if (
-          typeof parsed === 'object' &&
-          parsed !== null &&
-          typeof (parsed as Record<string, unknown>).apiKey === 'string'
-        ) {
-          apiKey.value = (parsed as Record<string, string>).apiKey
-        }
+        const apiKeyValue =
+          typeof parsed === 'object' && parsed !== null
+            ? (parsed as Record<string, unknown>).apiKey
+            : undefined
+        if (typeof apiKeyValue === 'string') apiKey.value = apiKeyValue
       }
     } catch {
       apiKey.value = ''
