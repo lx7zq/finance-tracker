@@ -55,11 +55,13 @@
 import { computed, ref } from 'vue'
 
 import { useTransactionForm } from '@/composables/useTransactionForm'
+import { useToastStore } from '@/stores/toast'
 import { useTransactionStore } from '@/stores/transactions'
 import type { Transaction, TransactionType } from '@/types'
 import { CATEGORY_LABELS, EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '@/types'
 
 const store = useTransactionStore()
+const toast = useToastStore()
 const isOpen = ref(false)
 const editingId = ref<string | null>(null)
 
@@ -70,8 +72,10 @@ const {
 } = useTransactionForm((data) => {
   if (editingId.value) {
     store.updateTransaction(editingId.value, data)
+    toast.show('แก้ไขรายการแล้ว')
   } else {
     store.addTransaction(data)
+    toast.show('เพิ่มรายการแล้ว')
   }
   isOpen.value = false
 })

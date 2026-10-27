@@ -49,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+import { useToastStore } from '@/stores/toast'
 import { useTransactionStore } from '@/stores/transactions'
 import EmptyLedger from '@/components/ui/EmptyLedger.vue'
 import type { Transaction } from '@/types'
@@ -59,8 +60,12 @@ defineProps<{ transactions: Transaction[] }>()
 defineEmits<{ edit: [tx: Transaction] }>()
 
 const store = useTransactionStore()
+const toast = useToastStore()
 
 function confirmDelete(id: string) {
-  if (confirm('ลบรายการนี้?')) store.deleteTransaction(id)
+  if (confirm('ลบรายการนี้?')) {
+    store.deleteTransaction(id)
+    toast.show('ลบรายการแล้ว', 'error')
+  }
 }
 </script>

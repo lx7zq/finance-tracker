@@ -89,7 +89,7 @@
     <VoiceEntrySheet
       ref="voiceRef"
       @manual="formRef?.openAdd('expense')"
-      @saved="savedSnackbar = true"
+      @saved="toast.show('บันทึกรายการแล้ว')"
       @open-settings="settingsRef?.open()"
     />
     <SettingsDialog ref="settingsRef" />
@@ -103,10 +103,6 @@
       aria-label="บันทึกด้วยเสียง"
       @click="voiceRef?.open()"
     />
-
-    <v-snackbar v-model="savedSnackbar" timeout="2500" color="success">
-      บันทึกรายการแล้ว
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -121,17 +117,18 @@ import TransactionForm from '@/components/transaction/TransactionForm.vue'
 import TransactionList from '@/components/transaction/TransactionList.vue'
 import VoiceEntrySheet from '@/components/voice/VoiceEntrySheet.vue'
 import { useCurrentMonth } from '@/composables/useCurrentMonth'
+import { useToastStore } from '@/stores/toast'
 import { useTransactionStore } from '@/stores/transactions'
 import type { Category } from '@/types'
 import { formatCurrency } from '@/utils'
 import { isVoiceCaptureSupported } from '@/utils/voice'
 
 const store = useTransactionStore()
+const toast = useToastStore()
 const { currentMonth, displayMonth, prevMonth, nextMonth } = useCurrentMonth()
 const formRef = ref<InstanceType<typeof TransactionForm> | null>(null)
 const voiceRef = ref<InstanceType<typeof VoiceEntrySheet> | null>(null)
 const settingsRef = ref<InstanceType<typeof SettingsDialog> | null>(null)
-const savedSnackbar = ref(false)
 const voiceSupported = isVoiceCaptureSupported()
 
 const monthTransactions = computed(() =>
