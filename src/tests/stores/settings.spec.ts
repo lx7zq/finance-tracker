@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
 
 import { useSettingsStore } from '@/stores/settings'
@@ -53,5 +53,44 @@ describe('useSettingsStore persistence', () => {
 
     expect(store.apiKey).toBe('')
     expect(JSON.parse(localStorage.getItem('settings') ?? '{}')).toEqual({ apiKey: '' })
+  })
+})
+
+describe('effectiveApiKey (env fallback)', () => {
+  beforeEach(() => {
+    localStorage.clear()
+    setActivePinia(createPinia())
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it('ผู้ใช้ไม่ได้ตั้งคีย์ → ใช้ VITE_GEMINI_API_KEY จาก env โดยตรง', () => {
+    vi.stubEnv('VITE_GEMINI_API_KEY', 'env-key')
+
+    const store = useSettingsStore()
+
+    expect(store.effectiveApiKey).toBe('env-key')
+    expect(store.hasKey).toBe(true)
+    expect(store.apiKey).toBe('')
+  })
+
+  it('คีย์ผู้ใช้ชนะ env เสมอ', () => {
+    vi.stubEnv('VITE_GEMINI_API_KEY', 'env-key')
+
+    const store = useSettingsStore()
+    store.setApiKey('user-key')
+
+    expect(store.effectiveApiKey).toBe('user-key')
+  })
+
+  it('ไม่มีทั้งสองแหล่ง → ว่างและ hasKey false', () => {
+    vi.stubEnv('VITE_GEMINI_API_KEY', '')
+
+    const store = useSettingsStore()
+
+    expect(store.effectiveApiKey).toBe('')
+    expect(store.hasKey).toBe(false)
   })
 })

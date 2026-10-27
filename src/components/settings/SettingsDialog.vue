@@ -11,8 +11,12 @@
           hint="ใช้สำหรับ parse รายการจากเสียง เก็บเฉพาะในเบราว์เซอร์นี้"
           persistent-hint
         />
-        <div v-if="store.apiKey" class="text-caption mt-3 text-medium-emphasis">
-          มีคีย์บันทึกอยู่แล้ว ระบบเสียงใช้ AI parse ได้ปกติ
+        <div v-if="store.hasKey" class="text-caption mt-3 text-medium-emphasis">
+          {{
+            store.apiKey
+              ? 'มีคีย์บันทึกอยู่แล้ว ระบบเสียงใช้ AI parse ได้ปกติ'
+              : 'แอปมีคีย์จากไฟล์ตั้งค่า (.env.local) อยู่แล้ว — ใส่คีย์ที่นี่ทับได้'
+          }}
         </div>
       </v-card-text>
 
