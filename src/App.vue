@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 
 import Navbar from '@/components/layout/Navbar.vue'
+import AppToaster from '@/components/ui/AppToaster.vue'
 </script>
 
 <template>
@@ -10,5 +11,6 @@ import Navbar from '@/components/layout/Navbar.vue'
     <v-main>
       <RouterView />
     </v-main>
+    <AppToaster />
   </v-app>
 </template>

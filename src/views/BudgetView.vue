@@ -22,7 +22,7 @@
                 icon="mdi-close"
                 size="x-small"
                 variant="text"
-                @click="store.removeBudget(b.category, currentMonth)"
+                @click="removeBudget(b.category)"
               />
             </div>
 
@@ -116,6 +116,7 @@
 import { computed, ref } from 'vue'
 
 import { useCurrentMonth } from '@/composables/useCurrentMonth'
+import { useToastStore } from '@/stores/toast'
 import { useTransactionStore } from '@/stores/transactions'
 import EmptyLedger from '@/components/ui/EmptyLedger.vue'
 import type { Budget, Category } from '@/types'
@@ -123,6 +124,7 @@ import { CATEGORY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS, EXPENSE_CATEGORIES } 
 import { formatCurrency } from '@/utils'
 
 const store = useTransactionStore()
+const toast = useToastStore()
 const { currentMonth, displayMonth } = useCurrentMonth()
 
 const showDialog = ref(false)
@@ -155,6 +157,12 @@ function handleAdd() {
   const amount = parseFloat(newAmount.value)
   store.setBudget(newCategory.value, currentMonth.value, amount)
   closeDialog()
+  toast.show('ตั้งงบแล้ว')
+}
+
+function removeBudget(category: Category) {
+  store.removeBudget(category, currentMonth.value)
+  toast.show('ลบงบแล้ว', 'error')
 }
 
 const spent = computed(() =>
